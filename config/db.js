@@ -3,11 +3,11 @@ const mysql = require('mysql2');
 
 function execQuery(sql, placeholderValues, callback) {
 	let con = mysql.createConnection({
-        host: process.env.DB_HOST,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASS,
-        database: process.env.DB_NAME,
-        
+        host: 'localhost',
+		user: 'root',
+		password: '1234',
+		database: 'blog-dev'
+
 	});
 	con.connect(err => {
 		if (err) {
