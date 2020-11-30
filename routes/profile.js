@@ -1,6 +1,6 @@
 
-const {execQuery} = require('../db');
-const {execQuery2} = require('../db');
+const {execQuery} = require('../config/db');
+const {execQuery2} = require('../config/db');
 
 function update(req, res) {
 	// {new_bio: ...}
@@ -38,10 +38,6 @@ function follow(req, res) {
 			if (status === 'Failure')
 				res.status(400).send('The given user doesn\'t exist!');
 			else {
-			/*
-				const user = {username};
-				const accessToken = auth.getToken(user);  
-				res.json({ accessToken: accessToken }); */
 				execQuery('INSERT INTO AfollowsB (A, B) VALUES (?, ?)',
 					[req.user.username, req.body.user_to_follow], (err, result, fields) => {
 					if (err) {
@@ -78,11 +74,6 @@ async function showMyProfile(req, res) {
 	// show_profile_by_username(req.user.username)
 	let result = await getProfileByUsername(req.user.username);
 	res.json({username: result[0].username, bio: result[0].bio});
-
-/*	if (result.length !== 0)	
-
-	else
-			res.status(404).send('No such data!');	 */
 }
 
 async function showProfile(req, res) {
@@ -104,21 +95,8 @@ async function getProfileByUsername(username) {
 	let resultPromise = execQuery2('SELECT username, bio FROM Users where username=?', [username]);
 	let result = await resultPromise; // if the username is invalid, result is []; so doing result[0].bio will throw TypeError
 	return result;
-//	return {username: result[0].username, bio: result[0].bio};
-	/* // Below code was tested in `test.js'
-		let resultPromise = execQuery2('SELECT username, bio FROM Users where username=?', [req.body.username]);
-	let result;
-	try {
-		result = await resultPromise;
-		if (result.length !== 0)	
-			res.json({bio: result[0].bio, username: result[0].username})
-		else
-			res.status(400).send('No such data!') // I missed this else part and Postman didn't get any response, so was stuck.
-	} catch (e) {
-		console.error(e);
-		res.status(400).send('wrong input data');
-	}
-	*/
+	//	return {username: result[0].username, bio: result[0].bio};
+	
 }
 
 async function showAllProfiles(req, res) {
@@ -127,13 +105,6 @@ async function showAllProfiles(req, res) {
 	let resultPromise = execQuery2('SELECT username, bio FROM Users', []);
 	let result = await resultPromise; // if the username is invalid, result is []; so doing result[0].bio will throw TypeError
 	res.json(result);
-/*	for (item of result)
-		all_users.push(item.username)
-	
-	for (user of all_users) {
-		
-	}*/
-	
 	// iterate all users, run `show_profile_by_username' for each and add to array
 	// return all_users;
 }
