@@ -5,7 +5,7 @@ const pool = createPool({
 	host: 'localhost',
 	user: 'root',
 	password: '1234',
-	database: 'blog-dev'
+	database: 'blog-dev',
 	connectionLimit: 1000
 });
 //For pooling
